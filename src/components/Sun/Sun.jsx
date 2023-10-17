@@ -19,7 +19,7 @@ const Sun = () => {
         emissiveIntensity={0.6}
         emissive={0xffffff}
       />
-      <pointLight castShadow />
+      <pointLight castShadow intensity={100} />
     </mesh>
   );
 };
