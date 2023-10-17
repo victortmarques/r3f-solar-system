@@ -17,9 +17,14 @@ const Moon = () => {
   });
 
   return (
-    <mesh ref={moonRef} position={[xAxis, 0, 0]} castShadow>
+    <mesh ref={moonRef} position={[xAxis, 0, 0]} castShadow receiveShadow>
       <sphereGeometry args={[0.5, 32, 32]} />
-      <meshPhongMaterial map={moonTextures} />
+      <meshPhongMaterial
+        map={moonTextures}
+        emissiveMap={moonTextures}
+        emissive={0xffffff}
+        emissiveIntensity={0.05}
+      />
     </mesh>
   );
 };
