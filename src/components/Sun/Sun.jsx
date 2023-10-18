@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
-const Sun = () => {
+const Sun = React.memo(() => {
   const sunRef = useRef();
   const [sunTextures] = useTexture(["./textures/sun_textures.jpg"]);
 
@@ -22,6 +22,6 @@ const Sun = () => {
       <pointLight castShadow intensity={100} />
     </mesh>
   );
-};
+});
 
 export default Sun;

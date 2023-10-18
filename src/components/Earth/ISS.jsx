@@ -1,17 +1,28 @@
 import { useGLTF } from "@react-three/drei";
-import { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
-const ISS = () => {
+
+const ISS = React.memo(() => {
   const issRef = useRef();
+  const clockRef = useRef(new THREE.Clock());
+
   const memoizedISS = useMemo(() => {
     return useGLTF("./models/ISSModel/ISS_stationary.gltf");
   });
   const xAxis = 2;
-  useFrame(({ clock }) => {
+
+  const updateMoonPosition = useCallback(() => {
     // Orbit Rotation
-    issRef.current.position.x = Math.sin(clock.getElapsedTime() * 0.8) * xAxis;
-    issRef.current.position.z = Math.cos(clock.getElapsedTime() * 0.8) * xAxis;
+    issRef.current.position.x =
+      Math.sin(clockRef.current.getElapsedTime() * 0.6) * xAxis;
+    issRef.current.position.z =
+      Math.cos(clockRef.current.getElapsedTime() * 0.6) * xAxis;
+  }, []);
+
+  useFrame(() => {
+    updateMoonPosition();
   });
 
   return (
@@ -24,6 +35,6 @@ const ISS = () => {
       />
     </mesh>
   );
-};
+});
 
 export default ISS;

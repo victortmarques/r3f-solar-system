@@ -1,13 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import Moon from "./Moon";
 import ISS from "./ISS";
 import * as THREE from "three";
 
-const Earth = ({ displacementScale }) => {
+const Earth = React.memo(({ displacementScale }) => {
   const earthRef = useRef();
   const earthPositionRef = useRef(new THREE.Vector3(8, 0, 0));
+  const clockRef = useRef(new THREE.Clock());
 
   const [
     earthTextures,
@@ -23,15 +24,19 @@ const Earth = ({ displacementScale }) => {
     "./textures/earth_nightmap_textures.jpg",
   ]);
 
-  useFrame(({ clock }) => {
+  const updateEarthPosition = useCallback(() => {
     // Calculate the Earth's position based on its angle from the Sun
-    const angle = clock.getElapsedTime() * 0.5;
+    const angle = clockRef.current.getElapsedTime() * 0.5;
     const distance = 8;
     const x = Math.sin(angle) * distance;
     const z = Math.cos(angle) * distance;
     earthRef.current.position.set(x, 0, z);
     earthRef.current.rotation.y += 0.002;
     earthPositionRef.current = earthRef.current.position;
+  }, []);
+
+  useFrame(() => {
+    updateEarthPosition();
   });
 
   return (
@@ -54,6 +59,6 @@ const Earth = ({ displacementScale }) => {
       <ISS />
     </group>
   );
-};
+});
 
 export default Earth;
